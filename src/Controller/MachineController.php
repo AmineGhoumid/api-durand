@@ -9,7 +9,6 @@ use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class MachineController extends AbstractController
 {
@@ -18,6 +17,7 @@ class MachineController extends AbstractController
      * @param Request $request
      * @param UserRepository $userRepository
      * @return Response
+     * used to create a machine
      */
     public function createMachine(Request $request, UserRepository $userRepository): Response
     {
@@ -56,6 +56,7 @@ class MachineController extends AbstractController
      * @param UserRepository $userRepository
      * @param MachineRepository $machineRepository
      * @return Response
+     * used to get every machine of one user
      */
     public function getUserMachines(Request $request, UserRepository $userRepository,MachineRepository $machineRepository) :Response
     {
@@ -96,6 +97,7 @@ class MachineController extends AbstractController
      * @param UserRepository $userRepository
      * @param MachineRepository $machineRepository
      * @return Response
+     * used to delete a particular machine
      */
     public function deleteMachine(Request $request, UserRepository $userRepository,MachineRepository $machineRepository) :Response
     {
@@ -137,6 +139,7 @@ class MachineController extends AbstractController
      * @param UserRepository $userRepository
      * @param MachineRepository $machineRepository
      * @return Response
+     * used to edit a particular machine
      */
     public function editMachine(Request $request, UserRepository $userRepository,MachineRepository $machineRepository) :Response
     {
@@ -164,7 +167,6 @@ class MachineController extends AbstractController
             // machine edition
             if (!empty($post['new_machine_name']))
                 $machine->setName($post['new_machine_name']);
-
             if (!empty($post['new_machine_description']))
                 $machine->setDescription($post['new_machine_description']);
 
@@ -183,9 +185,10 @@ class MachineController extends AbstractController
      * @param $machinename
      * @param $description
      * @throws Exception
+     * used to check that every user input are given
+     * //TODO put it in a middleware
      */
     private function checkInputInfo($username, $machinename, $description){
-
         if (empty($username))
             throw new Exception('Please specify a username.');
 
@@ -199,6 +202,7 @@ class MachineController extends AbstractController
     /**
      * @param $user
      * @throws Exception
+     * used to check if the user already exists
      */
     private function checkUserExistence($user){
         if (empty($user))
@@ -208,6 +212,7 @@ class MachineController extends AbstractController
     /**
      * @param $machine
      * @throws Exception
+     * used to check if the machine already exists
      */
     private function checkMachineExistence($machine){
         if (empty($machine))
@@ -218,6 +223,7 @@ class MachineController extends AbstractController
      * @param $tokenUsername
      * @param $postUsername
      * @throws Exception
+     * used to check if the user that is sending the request (identified by his token) is the same as the proprietary of the machine object
      */
     private function checkLinkedToken($tokenUsername, $postUsername){
         if($tokenUsername != $postUsername)
@@ -227,6 +233,8 @@ class MachineController extends AbstractController
     /**
      * @param $request
      * @return mixed
+     * used to parse the incoming request
+     * //TODO put it in a middleware
      */
     private function parseRequest($request){
         if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
@@ -238,7 +246,9 @@ class MachineController extends AbstractController
 
     /**
      * @param $authHeader
+     * @return mixed
      * @throws Exception
+     * used to get the payload in which the user is mentionned
      */
     private function tokenLinkedUser($authHeader){
         // get only the token by getting rid of "BEARER"

@@ -13,7 +13,9 @@ security:
 
     # access rules
     # dev isn't secured
+    # register isn't secured so that user can actually create an account
     # login is used to authenticate the user
+    # api is secured and will require jwt token
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/

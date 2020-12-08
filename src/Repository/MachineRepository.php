@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Machine;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,34 +20,12 @@ class MachineRepository extends ServiceEntityRepository
         parent::__construct($registry, Machine::class);
     }
 
-    // /**
-    //  * @return Machine[] Returns an array of Machine objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('m.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Machine
-    {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+    /**
+     * @param $machineName
+     * @return Machine|null Returns an array of Machine objects
+     * @throws NonUniqueResultException
+     * used to find a machine object by name in the database
+     */
     public function findOneByMachineName($machineName): ?Machine
     {
         return $this->createQueryBuilder('machine')
@@ -57,6 +36,11 @@ class MachineRepository extends ServiceEntityRepository
             ;
     }
 
+    /**
+     * @param $userId
+     * @return Machine|array|int|string|null
+     * used to find every machine of particular user in the database
+     */
     public function getAllByUserId($userId)
     {
         return $this->createQueryBuilder('machine')
