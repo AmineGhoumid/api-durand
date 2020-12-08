@@ -11,6 +11,9 @@ security:
                 class: App\Entity\User
                 property: username
 
+    # access rules
+    # dev isn't secured
+    # login is used to authenticate the user
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/

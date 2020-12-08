@@ -1,3 +1,8 @@
+# lexik config file
+# used to get path of secret pass, private and public key from the .env
+# manually added a token ttl to force the user to get one
+# //TODO add refresh token
+
 lexik_jwt_authentication:
     secret_key: '%env(resolve:JWT_SECRET_KEY)%'
     public_key: '%env(resolve:JWT_PUBLIC_KEY)%'

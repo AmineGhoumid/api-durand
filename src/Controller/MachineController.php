@@ -166,7 +166,7 @@ class MachineController extends AbstractController
                 $machine->setName($post['new_machine_name']);
 
             if (!empty($post['new_machine_description']))
-                $machine->setName($post['new_machine_description']);
+                $machine->setDescription($post['new_machine_description']);
 
             $em->flush();
 
