@@ -1,3 +1,29 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+#############   Auth   #############
+login_check:
+  path: /api/login_check
+
+register:
+  path: /api/register
+  controller: App\Controller\AuthController::register
+  methods: POST
+
+############# Machines #############
+createMachine:
+  path: /api/createMachine
+  controller: App\Controller\MachineController::createMachine
+  methods: POST
+
+getUserMachine:
+  path: /api/getUserMachines
+  controller: App\Controller\MachineController::getUserMachines
+  methods: POST
+
+deleteMachine:
+  path: /api/deleteMachine
+  controller: App\Controller\MachineController::deleteMachine
+  methods: POST
+
+editMachine:
+  path: /api/editMachine
+  controller: App\Controller\MachineController::editMachine
+  methods: POST
