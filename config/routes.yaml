@@ -7,3 +7,8 @@ createMachine:
   path: /api/createMachine
   controller: App\Controller\MachineController::createMachine
   methods: POST
+
+getUserMachine:
+  path: /api/getUserMachines
+  controller: App\Controller\MachineController::getUserMachines
+  methods: POST

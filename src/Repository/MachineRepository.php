@@ -47,4 +47,13 @@ class MachineRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function getAllByUserId($userId)
+    {
+        return $this->createQueryBuilder('machine')
+            ->andWhere('machine.user_id = :val')
+            ->setParameter('val', $userId)
+            ->getQuery()
+            ->getArrayResult();
+    }
 }
