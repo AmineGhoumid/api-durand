@@ -47,6 +47,15 @@ class MachineRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function findOneByMachineName($machineName): ?Machine
+    {
+        return $this->createQueryBuilder('machine')
+            ->andWhere('machine.name = :val')
+            ->setParameter('val', $machineName)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
 
     public function getAllByUserId($userId)
     {

@@ -1,4 +1,4 @@
-############# Auth #############
+#############   Auth   #############
 login_check:
   path: /api/login_check
 
@@ -11,4 +11,9 @@ createMachine:
 getUserMachine:
   path: /api/getUserMachines
   controller: App\Controller\MachineController::getUserMachines
+  methods: POST
+
+deleteMachine:
+  path: /api/deleteMachine
+  controller: App\Controller\MachineController::deleteMachine
   methods: POST

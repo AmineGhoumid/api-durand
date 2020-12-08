@@ -74,10 +74,7 @@ class MachineController extends AbstractController
 
             // token match verification
             $tokenUsername = $this->tokenLinkedUser($request->headers->get('Authorization'))->username;
-            if($tokenUsername != $post['username']){
-                $post['return']=["status" => "aborted", "message"=>"You cannot access this user's machines. Your token doesn't match to his account."];
-                return new Response(json_encode($post, 201));
-            }
+            $this->checkLinkedToken($tokenUsername, $user->getUsername());
 
             // machine list gathering
             $machines = $machineRepository->getAllByUserId($user->getId());
@@ -89,6 +86,47 @@ class MachineController extends AbstractController
             return new Response(json_encode($post, 201));
         }
         $post['return']=["status" => "gathered", "message"=>"This machines were successfully gathered"];
+        return new Response(json_encode($post, 201));
+    }
+
+    /**
+     * @Route("/api/deleteMachine", name="deleteMachine")
+     * @param Request $request
+     * @param UserRepository $userRepository
+     * @param MachineRepository $machineRepository
+     * @return Response
+     */
+    public function deleteMachine(Request $request, UserRepository $userRepository,MachineRepository $machineRepository) :Response
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        // parse request content
+        $request = $this->parseRequest($request);
+
+        try {
+            // post data and verification
+            $post = array(
+                'machine_name' => $request->request->get('machine_name')
+            );
+            $this->checkInputInfo("unused", $post['machine_name'], "unused");
+
+            // machine existence verification
+            $machine = $machineRepository->findOneByMachineName($post['machine_name']);
+            $this->checkMachineExistence($machine);
+
+            // token match verification
+            $tokenUsername = $this->tokenLinkedUser($request->headers->get('Authorization'))->username;
+            $this->checkLinkedToken($tokenUsername, $userRepository->findOneById($machine->getUserId())->getUsername());
+
+            // machine suppression
+            $em->remove($machine);
+            $em->flush();
+
+        }catch (Exception $e){
+            $post['return']=["status" => "aborted", "message" => $e->getMessage()];
+            return new Response(json_encode($post, 201));
+        }
+        $post['return']=["status" => "gathered", "message"=>"This machines was successfully deleted"];
         return new Response(json_encode($post, 201));
     }
 
@@ -119,6 +157,29 @@ class MachineController extends AbstractController
             throw new Exception('Selected user doesn\'t exists!');
     }
 
+    /**
+     * @param $machine
+     * @throws Exception
+     */
+    private function checkMachineExistence($machine){
+        if (empty($machine))
+            throw new Exception('Selected machine doesn\'t exists!');
+    }
+
+    /**
+     * @param $tokenUsername
+     * @param $postUsername
+     * @throws Exception
+     */
+    private function checkLinkedToken($tokenUsername, $postUsername){
+        if($tokenUsername != $postUsername)
+            throw new Exception('You cannot access this user\'s machines. Your token doesn\'t match to his account.');
+    }
+
+    /**
+     * @param $request
+     * @return mixed
+     */
     private function parseRequest($request){
         if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
             $data = json_decode($request->getContent(), true);
