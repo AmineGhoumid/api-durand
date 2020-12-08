@@ -13,6 +13,8 @@ composer update
 - Mettez en place votre environnement composé d'un serveur web, de PHP 7.2.19 et de MySQL 5.7.24.
 
   Vous pouvez aussi utiliser un environnement de stack comme [Laragon](https://laragon.org/).
+  
+- Importer la base de données présente à la racine du projet.
 
 - Pour la sécurisation via JWT il faudra créer une clé privée et publique permettant la création et la 
   vérification des tokens entrants. Le pass à fournir doit être gardé confidentiel et est impératif pour la configuration du .env dans l'étape suivante.
