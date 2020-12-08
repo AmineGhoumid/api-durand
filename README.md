@@ -14,7 +14,7 @@ composer update
 
   Vous pouvez aussi utiliser un environnement de stack comme [Laragon](https://laragon.org/).
   
-- Importer la base de données présente à la racine du projet.
+- Importer la base de données présente à la racine du projet avec comme nom de base : api-durand.
 
 - Pour la sécurisation via JWT il faudra créer une clé privée et publique permettant la création et la 
   vérification des tokens entrants. Le pass à fournir doit être gardé confidentiel et est impératif pour la configuration du .env dans l'étape suivante.
