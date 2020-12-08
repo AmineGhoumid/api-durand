@@ -1,3 +1,9 @@
-############# API #############
+############# Auth #############
 login_check:
   path: /api/login_check
+
+############# Machines #############
+createMachine:
+  path: /api/createMachine
+  controller: App\Controller\MachineController::createMachine
+  methods: POST
