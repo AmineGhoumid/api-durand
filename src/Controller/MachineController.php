@@ -9,6 +9,7 @@ use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class MachineController extends AbstractController
 {
@@ -126,7 +127,54 @@ class MachineController extends AbstractController
             $post['return']=["status" => "aborted", "message" => $e->getMessage()];
             return new Response(json_encode($post, 201));
         }
-        $post['return']=["status" => "gathered", "message"=>"This machines was successfully deleted"];
+        $post['return']=["status" => "deleted", "message"=>"This machines was successfully deleted"];
+        return new Response(json_encode($post, 201));
+    }
+
+    /**
+     * @Route("/api/editMachine", name="editMachine")
+     * @param Request $request
+     * @param UserRepository $userRepository
+     * @param MachineRepository $machineRepository
+     * @return Response
+     */
+    public function editMachine(Request $request, UserRepository $userRepository,MachineRepository $machineRepository) :Response
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        // parse request content
+        $request = $this->parseRequest($request);
+
+        try {
+            // post data and verification
+            $post = array(
+                'machine_name' => $request->request->get('machine_name'),
+                'new_machine_name' => $request->request->get('new_machine_name'),
+                'new_machine_description' => $request->request->get('new_machine_description')
+            );
+
+            // machine existence verification
+            $machine = $machineRepository->findOneByMachineName($post['machine_name']);
+            $this->checkMachineExistence($machine);
+
+            // token match verification
+            $tokenUsername = $this->tokenLinkedUser($request->headers->get('Authorization'))->username;
+            $this->checkLinkedToken($tokenUsername, $userRepository->findOneById($machine->getUserId())->getUsername());
+
+            // machine edition
+            if (!empty($post['new_machine_name']))
+                $machine->setName($post['new_machine_name']);
+
+            if (!empty($post['new_machine_description']))
+                $machine->setName($post['new_machine_description']);
+
+            $em->flush();
+
+        }catch (Exception $e){
+            $post['return']=["status" => "aborted", "message" => $e->getMessage()];
+            return new Response(json_encode($post, 201));
+        }
+        $post['return']=["status" => "edited", "message"=>"This machines was successfully edited"];
         return new Response(json_encode($post, 201));
     }
 

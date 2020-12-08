@@ -17,3 +17,8 @@ deleteMachine:
   path: /api/deleteMachine
   controller: App\Controller\MachineController::deleteMachine
   methods: POST
+
+editMachine:
+  path: /api/editMachine
+  controller: App\Controller\MachineController::editMachine
+  methods: POST
