@@ -2,6 +2,11 @@
 login_check:
   path: /api/login_check
 
+register:
+  path: /api/register
+  controller: App\Controller\AuthController::register
+  methods: POST
+
 ############# Machines #############
 createMachine:
   path: /api/createMachine
